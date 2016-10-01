@@ -19,8 +19,6 @@ using namespace std;
 
 int main( int argc, char** argv )
 {
-    vector<cv::Point2f> pts1, pts2;
-
     g2o::SparseOptimizer    optimizer;
     g2o::BlockSolver_6_3::LinearSolverType* linearSolver = new  g2o::LinearSolverCholmod<g2o::BlockSolver_6_3::PoseMatrixType> ();
     g2o::BlockSolver_6_3* block_solver = new g2o::BlockSolver_6_3( linearSolver );
@@ -28,8 +26,8 @@ int main( int argc, char** argv )
     optimizer.setAlgorithm( algorithm );
     optimizer.setVerbose( true );
 
-
-    for (int i = 0; i < 3; i++)
+    size_t num = 4;
+    for (int i = 0; i < num; i++)
     {
         g2o::VertexSE3Expmap* v = new g2o::VertexSE3Expmap();
         v->setId(i);
@@ -40,12 +38,40 @@ int main( int argc, char** argv )
     }
 
     vector<g2o::EdgeSE3Expmap *> edges;
-    for (size_t i = 0; i < 3; ++i)
+    for (size_t i = 0; i < num; ++i)
     {
         g2o::EdgeSE3Expmap *edge = new g2o::EdgeSE3Expmap();
         edge->setVertex(0, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex(i)));
-        edge->setVertex(1, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex((i + 1) % 3)));
-        edge->setMeasurement(g2o::SE3Quat());
+        edge->setVertex(1, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex((i + 1) % num)));
+
+        g2o::SE3Quat *pose = new g2o::SE3Quat();
+        pose->setRotation(Eigen::Quaterniond::Identity());
+        switch (i % num) {
+            case 0:
+                pose->setTranslation(g2o::Vector3D(1, 0, 0) + 0.1 * g2o::Vector3D::Random());
+//                cout <<i<<" "<<pose->toVector()<<endl;
+                break;
+            case 1:
+                pose->setTranslation(g2o::Vector3D(0, 1, 0) + 0.1 * g2o::Vector3D::Random());
+                break;
+            case 2:
+                pose->setTranslation(g2o::Vector3D(-1, 0, 0) + 0.1 * g2o::Vector3D::Random());
+                break;
+            case 3:
+                pose->setTranslation(g2o::Vector3D(0, -1, 0) + 0.1 * g2o::Vector3D::Random());
+                break;
+            case 4:
+                pose->setTranslation(g2o::Vector3D(-1, 1, 0) + 0.1 * g2o::Vector3D::Random());
+                edge->setVertex(0, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex(1)));
+                edge->setVertex(1, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex(3)));
+                break;
+            case 5:
+                pose->setTranslation(g2o::Vector3D(1, 1, 0) + 0.1 * g2o::Vector3D::Random());
+                edge->setVertex(0, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex(0)));
+                edge->setVertex(1, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex(2)));
+        }
+        cout << "measurement id " << i << " Pose=" << endl << pose->toVector().transpose() << endl;
+        edge->setMeasurement(*pose);
         edge->setInformation(Eigen::MatrixXd::Identity(6, 6));
         edge->setParameterId(0, 0);
         edge->setRobustKernel( new g2o::RobustKernelHuber() );
@@ -54,7 +80,7 @@ int main( int argc, char** argv )
     }
 
 
-    optimizer.setVerbose(false);
+    optimizer.setVerbose(true);
     optimizer.initializeOptimization();
     optimizer.optimize(10);
 
@@ -62,7 +88,6 @@ int main( int argc, char** argv )
     for (size_t i = 0; i < edges.size(); i++)
     {
         g2o::VertexSE3Expmap *v = dynamic_cast<g2o::VertexSE3Expmap *> (optimizer.vertex(i));
-
         Eigen::Isometry3d pos = v->estimate();
         cout << "vertex id " << i << " Pose=" << endl << pos.matrix() << endl;
     }
