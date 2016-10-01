@@ -29,7 +29,7 @@ int main( int argc, char** argv )
     optimizer.setVerbose( true );
 
 
-    for ( int i=0; i<2; i++ )
+    for (int i = 0; i < 3; i++)
     {
         g2o::VertexSE3Expmap* v = new g2o::VertexSE3Expmap();
         v->setId(i);
@@ -39,61 +39,32 @@ int main( int argc, char** argv )
         optimizer.addVertex( v );
     }
 
-//    for ( size_t i=0; i<pts1.size(); i++ )
-//    {
-//        g2o::VertexSBAPointXYZ* v = new g2o::VertexSBAPointXYZ();
-//        v->setId( 2 + i );
-////        double z = 1;
-////        double x = ( pts1[i].x - cx ) * z / fx;
-////        double y = ( pts1[i].y - cy ) * z / fy;
-//        v->setMarginalized(true);
-////        v->setEstimate( Eigen::Vector3d(x,y,z) );
-//        optimizer.addVertex( v );
-//    }
-
-
-    vector<g2o::EdgeProjectXYZ2UV*> edges;
-    for ( size_t i=0; i<pts1.size(); i++ )
+    vector<g2o::EdgeSE3Expmap *> edges;
+    for (size_t i = 0; i < 3; ++i)
     {
-        g2o::EdgeProjectXYZ2UV*  edge = new g2o::EdgeProjectXYZ2UV();
-        edge->setVertex( 0, dynamic_cast<g2o::VertexSBAPointXYZ*>   (optimizer.vertex(i+2)) );
-        edge->setVertex( 1, dynamic_cast<g2o::VertexSE3Expmap*>     (optimizer.vertex(0)) );
-        edge->setMeasurement( Eigen::Vector2d(pts1[i].x, pts1[i].y ) );
-        edge->setInformation( Eigen::Matrix2d::Identity() );
+        g2o::EdgeSE3Expmap *edge = new g2o::EdgeSE3Expmap();
+        edge->setVertex(0, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex(i)));
+        edge->setVertex(1, dynamic_cast<g2o::VertexSE3Expmap *>   (optimizer.vertex((i + 1) % 3)));
+        edge->setMeasurement(g2o::SE3Quat());
+        edge->setInformation(Eigen::MatrixXd::Identity(6, 6));
         edge->setParameterId(0, 0);
         edge->setRobustKernel( new g2o::RobustKernelHuber() );
         optimizer.addEdge( edge );
         edges.push_back(edge);
     }
 
-    for ( size_t i=0; i<pts2.size(); i++ )
-    {
-        g2o::EdgeProjectXYZ2UV*  edge = new g2o::EdgeProjectXYZ2UV();
-        edge->setVertex( 0, dynamic_cast<g2o::VertexSBAPointXYZ*>   (optimizer.vertex(i+2)) );
-        edge->setVertex( 1, dynamic_cast<g2o::VertexSE3Expmap*>     (optimizer.vertex(1)) );
-        edge->setMeasurement( Eigen::Vector2d(pts2[i].x, pts2[i].y ) );
-        edge->setInformation( Eigen::Matrix2d::Identity() );
-        edge->setParameterId(0,0);
-        edge->setRobustKernel( new g2o::RobustKernelHuber() );
-        optimizer.addEdge( edge );
-        edges.push_back(edge);
-    }
 
-
-    optimizer.setVerbose(true);
+    optimizer.setVerbose(false);
     optimizer.initializeOptimization();
     optimizer.optimize(10);
 
-    g2o::VertexSE3Expmap* v = dynamic_cast<g2o::VertexSE3Expmap*>( optimizer.vertex(1) );
-    Eigen::Isometry3d pose = v->estimate();
-    cout<<"Pose="<<endl<<pose.matrix()<<endl;
 
-    for ( size_t i=0; i<pts1.size(); i++ )
+    for (size_t i = 0; i < edges.size(); i++)
     {
-        g2o::VertexSBAPointXYZ* v = dynamic_cast<g2o::VertexSBAPointXYZ*> (optimizer.vertex(i+2));
-        cout<<"vertex id "<<i+2<<", pos = ";
-        Eigen::Vector3d pos = v->estimate();
-        cout<<pos(0)<<","<<pos(1)<<","<<pos(2)<<endl;
+        g2o::VertexSE3Expmap *v = dynamic_cast<g2o::VertexSE3Expmap *> (optimizer.vertex(i));
+
+        Eigen::Isometry3d pos = v->estimate();
+        cout << "vertex id " << i << " Pose=" << endl << pos.matrix() << endl;
     }
 
     int inliers = 0;
@@ -110,7 +81,7 @@ int main( int argc, char** argv )
         }
     }
 
-    cout<<"inliers in total points: "<<inliers<<"/"<<pts1.size()+pts2.size()<<endl;
+    cout << "inliers in total points: " << inliers << "/" << edges.size() << endl;
     optimizer.save("ba.g2o");
     return 0;
 }
