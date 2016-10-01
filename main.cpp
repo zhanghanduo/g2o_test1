@@ -70,7 +70,7 @@ int main( int argc, char** argv )
     g2o::OptimizationAlgorithmLevenberg* algorithm = new g2o::OptimizationAlgorithmLevenberg( block_solver );
     
     optimizer.setAlgorithm( algorithm );
-    optimizer.setVerbose( false );
+    optimizer.setVerbose( true );
     
     // 添加节点
     // 两个位姿节点
@@ -182,8 +182,15 @@ int     findCorrespondingPoints( const cv::Mat& img1, const cv::Mat& img2, vecto
     cv::ORB orb;
     vector<cv::KeyPoint> kp1, kp2;
     cv::Mat desp1, desp2;
+    cv::Mat img1o, img2o;
     orb( img1, cv::Mat(), kp1, desp1 );
     orb( img2, cv::Mat(), kp2, desp2 );
+    cv::drawKeypoints(img1, kp1, img1o);
+    cv::drawKeypoints(img2, kp2, img2o);
+
+    cv::imshow("dsp1", img1o);
+    cv::imshow("dsp2", img2o);
+    cv::waitKey(0);
     cout<<"分别找到了"<<kp1.size()<<"和"<<kp2.size()<<"个特征点"<<endl;
     
     cv::Ptr<cv::DescriptorMatcher>  matcher = cv::DescriptorMatcher::create( "BruteForce-Hamming");
