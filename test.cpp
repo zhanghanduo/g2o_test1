@@ -60,10 +60,10 @@ int main( int argc, char** argv )
     for (size_t i = 0; i < num; ++i)
     {
         g2o::EdgeSE3 *edge = new g2o::EdgeSE3();
-//        edge->vertices()[0] = optimizer.vertex(i);
-//        edge->vertices()[0] = optimizer.vertex((i + 1) % num);
-        edge->setVertex(0, dynamic_cast<g2o::VertexSE3 *>   (optimizer.vertex(i)));
-        edge->setVertex(1, dynamic_cast<g2o::VertexSE3 *>   (optimizer.vertex((i + 1) % num)));
+        edge->vertices()[0] = optimizer.vertex(i);
+        edge->vertices()[1] = optimizer.vertex((i + 1) % num);
+//        edge->setVertex(0, dynamic_cast<g2o::VertexSE3 *>   (optimizer.vertex(i)));
+//        edge->setVertex(1, dynamic_cast<g2o::VertexSE3 *>   (optimizer.vertex((i + 1) % num)));
 
         Eigen::Isometry3d pose;
         pose.setIdentity();
