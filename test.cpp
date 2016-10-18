@@ -89,16 +89,16 @@ int main( int argc, char** argv )
         pose.setIdentity();
         switch (i % num) {
             case 0:
-                pose.translate(g2o::Vector3D(1, 0, 0) + 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(1, 0, 0) - 0.1 * g2o::Vector3D::Random());
                 break;
             case 1:
-                pose.translate(g2o::Vector3D(0, 1, 0) + 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(0, 1, 0) - 0.1 * g2o::Vector3D::Random());
                 break;
             case 2:
-                pose.translate(g2o::Vector3D(-1, 0, 0) + 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(-1, 0, 0) - 0.1 * g2o::Vector3D::Random());
                 break;
             case 3:
-                pose.translate(g2o::Vector3D(0, -1, 0) + 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(0, -1, 0) - 0.1 * g2o::Vector3D::Random());
                 break;
 
         }
@@ -146,6 +146,5 @@ int main( int argc, char** argv )
     }
 
     cout << "inliers in total points: " << inliers << "/" << edges.size() << endl;
-    // optimizer.save("ba.g2o");
     return 0;
 }
