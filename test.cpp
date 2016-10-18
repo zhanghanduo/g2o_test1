@@ -16,11 +16,11 @@
 
 #include <g2o/solvers/cholmod/linear_solver_cholmod.h>
 #include <g2o/solvers/csparse/linear_solver_csparse.h>
-#include <g2o/solvers/dense/linear_solver_dense.h>
+// #include <g2o/solvers/dense/linear_solver_dense.h>
 #include <g2o/types/slam3d/types_slam3d.h>
-#include <g2o/types/slam3d/parameter_se3_offset.h>
-#include <g2o/types/slam3d/se3quat.h>
-#include <g2o/types/sba/types_six_dof_expmap.h>
+// #include <g2o/types/slam3d/parameter_se3_offset.h>
+// #include <g2o/types/slam3d/se3quat.h>
+// #include <g2o/types/sba/types_six_dof_expmap.h>
 
 using namespace std;
 
@@ -34,6 +34,8 @@ int main( int argc, char** argv )
     linearSolver->setBlockOrdering(false);
     SlamBlockSolver *blockSolver = new SlamBlockSolver(linearSolver);
     g2o::OptimizationAlgorithmLevenberg *solver = new g2o::OptimizationAlgorithmLevenberg(blockSolver);
+    // g2o::OptimizationAlgorithmGaussNewton *solver = new g2o::OptimizationAlgorithmGaussNewton(blockSolver);
+
 
     g2o::SparseOptimizer optimizer;
     optimizer.setAlgorithm(solver);
@@ -44,9 +46,27 @@ int main( int argc, char** argv )
     {
         g2o::VertexSE3 *v = new g2o::VertexSE3();
         v->setId(i);
-        if ( i == 0)
-            v->setFixed( true );
         v->setEstimate(Eigen::Isometry3d::Identity());
+        Eigen::Isometry3d node=Eigen::Isometry3d::Identity();
+        switch (i) {
+            case 0:
+                v->setFixed(true);
+                v->setEstimate(Eigen::Isometry3d::Identity());
+                break;
+            case 1:
+                node.translate(g2o::Vector3D(1.1, 0, 0));
+                v->setEstimate(node);
+                break;
+            case 2:
+                node.translate(g2o::Vector3D(1.1, 1.1, 0));
+                v->setEstimate(node);
+                break;
+            case 3:
+                node.translate(g2o::Vector3D(0, 1.1, 0));
+                v->setEstimate(node);
+                break;
+
+        }
         optimizer.addVertex( v );
     }
 
@@ -84,19 +104,24 @@ int main( int argc, char** argv )
         }
         cout << "measurement id " << i << " Pose=" << endl << pose.matrix() << endl;
         edge->setMeasurement(pose);
-        Eigen::MatrixXd information = Eigen::MatrixXd::Identity(6, 6) * 100;
-        edge->setInformation(information);
-        cout << "information id " << i << " information=" << endl << information << endl;
+        Eigen::MatrixXd information = Eigen::MatrixXd::Identity(6, 6) * 0.01;
+        information(3,3) = 0.0001;
+        information(4,4) = 0.0001;
+        information(5,5) = 0.0001;
+
+        edge->setInformation(information.inverse());
+        cout << "information id " << i << " information=" << endl << information.inverse() << endl;
 
 //        edge->setParameterId(0, parameterse3offset->id());
         edge->setRobustKernel( new g2o::RobustKernelHuber() );
         optimizer.addEdge( edge );
         edges.push_back(edge);
     }
-
+    optimizer.save( "result_before.g2o" );
     optimizer.setVerbose(true);
     optimizer.initializeOptimization();
-    optimizer.optimize(10);
+    optimizer.optimize(100);
+    optimizer.save( "result_after.g2o" );
 
 
     for (size_t i = 0; i < edges.size(); i++)
@@ -121,6 +146,6 @@ int main( int argc, char** argv )
     }
 
     cout << "inliers in total points: " << inliers << "/" << edges.size() << endl;
-    optimizer.save("ba.g2o");
+    // optimizer.save("ba.g2o");
     return 0;
 }
