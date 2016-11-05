@@ -47,26 +47,26 @@ int main( int argc, char** argv )
         g2o::VertexSE3 *v = new g2o::VertexSE3();
         v->setId(i);
         v->setEstimate(Eigen::Isometry3d::Identity());
-        Eigen::Isometry3d node=Eigen::Isometry3d::Identity();
-        switch (i) {
-            case 0:
-                v->setFixed(true);
-                v->setEstimate(Eigen::Isometry3d::Identity());
-                break;
-            case 1:
-                node.translate(g2o::Vector3D(1.1, 0, 0));
-                v->setEstimate(node);
-                break;
-            case 2:
-                node.translate(g2o::Vector3D(1.1, 1.1, 0));
-                v->setEstimate(node);
-                break;
-            case 3:
-                node.translate(g2o::Vector3D(0, 1.1, 0));
-                v->setEstimate(node);
-                break;
+        // Eigen::Isometry3d node=Eigen::Isometry3d::Identity();
+        // switch (i) {
+        //     case 0:
+        //         v->setFixed(true);
+        //         v->setEstimate(Eigen::Isometry3d::Identity());
+        //         break;
+        //     case 1:
+        //         node.translate(g2o::Vector3D(10.1, 0, 0));
+        //         v->setEstimate(node);
+        //         break;
+        //     case 2:
+        //         node.translate(g2o::Vector3D(10.1, 1.1, 0));
+        //         v->setEstimate(node);
+        //         break;
+        //     case 3:
+        //         node.translate(g2o::Vector3D(0, 1.1, 0));
+        //         v->setEstimate(node);
+        //         break;
 
-        }
+        // }
         optimizer.addVertex( v );
     }
 
@@ -77,7 +77,7 @@ int main( int argc, char** argv )
 //    optimizer.addParameter(parameterse3offset);
 
     vector<g2o::EdgeSE3 *> edges;
-    for (size_t i = 0; i < num; ++i)
+    for (size_t i = 0; i < 8; ++i)
     {
         g2o::EdgeSE3 *edge = new g2o::EdgeSE3();
         edge->vertices()[0] = optimizer.vertex(i);
@@ -89,16 +89,16 @@ int main( int argc, char** argv )
         pose.setIdentity();
         switch (i % num) {
             case 0:
-                pose.translate(g2o::Vector3D(1, 0, 0) - 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(1, 0, 0) - 0.01 * g2o::Vector3D::Random());
                 break;
             case 1:
-                pose.translate(g2o::Vector3D(0, 1, 0) - 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(0, 1, 0) - 0.01 * g2o::Vector3D::Random());
                 break;
             case 2:
-                pose.translate(g2o::Vector3D(-1, 0, 0) - 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(-1, 0, 0) - 0.01 * g2o::Vector3D::Random());
                 break;
             case 3:
-                pose.translate(g2o::Vector3D(0, -1, 0) - 0.1 * g2o::Vector3D::Random());
+                pose.translate(g2o::Vector3D(0, -1, 0) - 0.01 * g2o::Vector3D::Random());
                 break;
 
         }
@@ -124,17 +124,20 @@ int main( int argc, char** argv )
     optimizer.save( "result_after.g2o" );
 
 
-    for (size_t i = 0; i < edges.size(); i++)
+    for (size_t i = 0; i < num; i++)
     {
         g2o::VertexSE3 *v = dynamic_cast<g2o::VertexSE3 *> (optimizer.vertex(i));
         Eigen::Isometry3d pos = v->estimate();
         cout << "vertex id " << i << " Pose=" << endl << pos.matrix() << endl;
     }
 
+    cout <<"vertex done."<<endl;
+
     int inliers = 0;
     for ( auto e:edges )
     {
         e->computeError();
+        cout<<"error = "<<e->chi2()<<endl;
         if ( e->chi2() > 1 )
         {
             cout<<"error = "<<e->chi2()<<endl;
