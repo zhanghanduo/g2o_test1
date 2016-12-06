@@ -1,0 +1,15 @@
+/home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/zh/softwares/g2o_test
+-- Configuring done
+CMake Error at CMakeLists.txt:19 (add_executable):
+  Cannot find source file:
+
+    orb.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .m .M .mm .h .hh .h++ .hm .hpp
+  .hxx .in .txx
+
+
+CMake Error: CMake can not determine linker language for target: orb_node
+CMake Error: Cannot determine link language for target "orb_node".
+-- Generating done
+-- Build files have been written to: /home/zh/softwares/g2o_test/cmake-build-debug

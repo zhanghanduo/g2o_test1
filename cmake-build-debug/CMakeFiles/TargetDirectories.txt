@@ -1,0 +1,4 @@
+/home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/orb_node.dir
+/home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/test_node.dir
