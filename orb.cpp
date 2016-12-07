@@ -12,8 +12,8 @@
 #include <g2o/core/optimization_algorithm_gauss_newton.h>
 #include <g2o/solvers/cholmod/linear_solver_cholmod.h>
 #include <g2o/stuff/sampler.h>
+#include "g2o/core/robust_kernel_impl.h"
 #include "g2o/solvers/dense/linear_solver_dense.h"
-// #include "targetTypes3D.hpp"
 #include "g2o/types/sba/types_six_dof_expmap.h"
 
 using namespace Eigen;
@@ -39,7 +39,7 @@ int main()
   optimizer.setAlgorithm(solver);
 
   // Sample the actual location of the target
-  std::vector<Vector3d> truePoint；
+  std::vector<Vector3d> truePoint;
   truePoint.reserve(numMeasurements);
   Vector3d truePoint1(5,3.2,100);
   Vector3d truePoint2(-7.5,10,58);
@@ -64,12 +64,13 @@ int main()
 
   // Construct vertex which corresponds to the actual point of the target
   VertexSBAPointXYZ * Trans3 = new VertexSBAPointXYZ();
-  Trans3->setEstimate(0,0,14);
+  Vector3d init(0,0,14);
+  Trans3->setEstimate(init);
   Trans3->setId(0);
   Trans3->setFixed(false);
   optimizer.addVertex(Trans3);
 
-  std::vector<EdgeSE3ProjectXYZOnlyPose_rot_known> edge_mono;
+  std::vector<EdgeSE3ProjectXYZOnlyPose_rot_known*> edge_mono;
   edge_mono.reserve(numMeasurements);
 
   // Now generate some noise corrupted measurements; for simplicity
@@ -88,7 +89,7 @@ int main()
       g2o::EdgeSE3ProjectXYZOnlyPose_rot_known* e = new g2o::EdgeSE3ProjectXYZOnlyPose_rot_known();
       e->setVertex(0, dynamic_cast<g2o::OptimizableGraph::Vertex*>(optimizer.vertex(0)));
       e->setMeasurement(obs);
-      e->setInformation(Matrix3d::Identity() / noiseSigma);
+      e->setInformation(Matrix2d::Identity() / noiseSigma);
       g2o::RobustKernelHuber* rk = new g2o::RobustKernelHuber;
       e->setRobustKernel(rk);
       rk->setDelta(deltaMono);
@@ -102,7 +103,7 @@ int main()
       edge_mono.push_back(e);
     }
 
-  Trans3->setEstimate(0,0,14);
+  Trans3->setEstimate(init);
   // Configure and set things going
   optimizer.initializeOptimization();
   optimizer.setVerbose(true);
@@ -115,12 +116,12 @@ int main()
   }
 
   VertexSBAPointXYZ* recov = static_cast<VertexSBAPointXYZ*>(optimizer.vertex(0));
-  vector3d recov_3d = recov->estimate();
+  Vector3d recov_3d = recov->estimate();
 
 
-  cout << "true point=\n" << truePoint << endl;
+//  std::cout << "true point=\n" << truePoint << std::endl;
 
-  cerr <<  "computed estimate=\n" << recov_3d(0) << " and " << recov_3d(1) << " and " << recov_3d(2) << endl;
+  cout <<  "computed estimate=\n" << recov_3d(0) << " and " << recov_3d(1) << " and " << recov_3d(2) << endl;
 
   //position->setMarginalized(true);
 

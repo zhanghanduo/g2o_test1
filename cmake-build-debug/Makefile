@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake
+CMAKE_COMMAND = /home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake
 
 # The command to remove a file.
-RM = /home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake -E remove -f
+RM = /home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zh/softwares/g2o_test
+CMAKE_SOURCE_DIR = /home/ugv/project/g2o_test
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zh/softwares/g2o_test/cmake-build-debug
+CMAKE_BINARY_DIR = /home/ugv/project/g2o_test/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/zh/softwares/g2o_test/cmake-build-debug
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -70,7 +70,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles /home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles /home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -136,6 +136,33 @@ test_node/fast:
 	$(MAKE) -f CMakeFiles/test_node.dir/build.make CMakeFiles/test_node.dir/build
 .PHONY : test_node/fast
 
+orb.o: orb.cpp.o
+
+.PHONY : orb.o
+
+# target to build an object file
+orb.cpp.o:
+	$(MAKE) -f CMakeFiles/orb_node.dir/build.make CMakeFiles/orb_node.dir/orb.cpp.o
+.PHONY : orb.cpp.o
+
+orb.i: orb.cpp.i
+
+.PHONY : orb.i
+
+# target to preprocess a source file
+orb.cpp.i:
+	$(MAKE) -f CMakeFiles/orb_node.dir/build.make CMakeFiles/orb_node.dir/orb.cpp.i
+.PHONY : orb.cpp.i
+
+orb.s: orb.cpp.s
+
+.PHONY : orb.s
+
+# target to generate assembly for a file
+orb.cpp.s:
+	$(MAKE) -f CMakeFiles/orb_node.dir/build.make CMakeFiles/orb_node.dir/orb.cpp.s
+.PHONY : orb.cpp.s
+
 test.o: test.cpp.o
 
 .PHONY : test.o
@@ -173,6 +200,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... orb_node"
 	@echo "... test_node"
+	@echo "... orb.o"
+	@echo "... orb.i"
+	@echo "... orb.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"
