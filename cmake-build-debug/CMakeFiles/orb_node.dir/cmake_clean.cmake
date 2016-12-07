@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/orb_node.dir/orb.cpp.o"
+  "CMakeFiles/orb_node.dir/orb_edge.cpp.o"
   "orb_node.pdb"
   "orb_node"
 )

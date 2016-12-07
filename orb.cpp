@@ -16,7 +16,8 @@
 #include "g2o/core/robust_kernel_impl.h"
 #include "g2o/solvers/dense/linear_solver_dense.h"
 #include "g2o/solvers/eigen/linear_solver_eigen.h"
-#include "g2o/types/sba/types_six_dof_expmap.h"
+#include "orb_edge.h"
+//#include "g2o/types/sba/types_six_dof_expmap.h"
 
 using namespace Eigen;
 using namespace std;
@@ -30,8 +31,8 @@ int main()
   unsigned int numMeasurements = 7;
   // Create the block solver - the dimensions are specified because
   // 3D observations marginalise to a 3D estimate
-//  typedef BlockSolver<BlockSolverTraits<3, 3> > BlockSolver_3_3;
-  g2o::BlockSolver_3_3::LinearSolverType* linearSolver
+  typedef BlockSolver<BlockSolverTraits<3, 3> > BlockSolver_3_3;
+  BlockSolver_3_3::LinearSolverType* linearSolver
           = new LinearSolverDense<BlockSolver_3_3::PoseMatrixType>();
 //      = new LinearSolverEigen<BlockSolver_3_3::PoseMatrixType>();
   BlockSolver_3_3* blockSolver

@@ -9,14 +9,15 @@
 #include <g2o/core/sparse_optimizer.h>
 #include <g2o/core/block_solver.h>
 #include <g2o/core/solver.h>
-#include <g2o/core/optimization_algorithm_gauss_newton.h>
+//#include <g2o/core/optimization_algorithm_gauss_newton.h>
 #include "g2o/core/optimization_algorithm_levenberg.h"
 //#include <g2o/solvers/cholmod/linear_solver_cholmod.h>
 #include <g2o/stuff/sampler.h>
 #include "g2o/core/robust_kernel_impl.h"
 #include "g2o/solvers/dense/linear_solver_dense.h"
 #include "g2o/solvers/eigen/linear_solver_eigen.h"
-#include "g2o/types/sba/types_six_dof_expmap.h"
+#include "orb_edge.h"
+//#include "g2o/types/sba/types_six_dof_expmap.h"
 
 using namespace Eigen;
 using namespace std;
@@ -31,15 +32,15 @@ int main()
   // Create the block solver - the dimensions are specified because
   // 3D observations marginalise to a 3D estimate
 //  typedef BlockSolver<BlockSolverTraits<3, 3> > BlockSolver_3_3;
-  g2o::BlockSolver_3_3::LinearSolverType* linearSolver
-          = new LinearSolverDense<BlockSolver_3_3::PoseMatrixType>();
+  g2o::BlockSolver_6_3::LinearSolverType* linearSolver
+          = new LinearSolverDense<BlockSolver_6_3::PoseMatrixType>();
 //      = new LinearSolverEigen<BlockSolver_3_3::PoseMatrixType>();
-  BlockSolver_3_3* blockSolver
-      = new BlockSolver_3_3(linearSolver);
-  OptimizationAlgorithmGaussNewton* solver
-    = new OptimizationAlgorithmGaussNewton(blockSolver);
-//    OptimizationAlgorithmLevenberg* solver
-//            = new OptimizationAlgorithmLevenberg(blockSolver);
+  BlockSolver_6_3* blockSolver
+      = new BlockSolver_6_3(linearSolver);
+//  OptimizationAlgorithmGaussNewton* solver
+//    = new OptimizationAlgorithmGaussNewton(blockSolver);
+    OptimizationAlgorithmLevenberg* solver
+            = new OptimizationAlgorithmLevenberg(blockSolver);
   optimizer.setAlgorithm(solver);
 
   // Sample the actual location of the target of 7 points in world coordinate
@@ -80,7 +81,7 @@ int main()
   // Construct vertex which corresponds to the actual point of the target
   g2o::VertexSE3Expmap * vSE3 = new g2o::VertexSE3Expmap();
   Matrix3d R_init = Matrix3D::Identity();
-  Vector3d T_init(0.2,-0.5,-25);
+  Vector3d T_init(0.2,-0.5,-30);
   vSE3->setEstimate(SE3Quat(R_init,T_init));
   vSE3->setId(0);
   vSE3->setFixed(false);
@@ -142,7 +143,7 @@ int main()
 //  std::cout << "true point=\n" << truePoint << std::endl;
 
   cout <<  "computed translation estimate=\n" << recov_3d.translation()(0) << " and " <<recov_3d.translation()(1)<< " and " << recov_3d.translation()(2) << endl;
-  cout << "rotation estimate=\n" << recov_3d.rotation().x() << endl;
+  cout << "rotation estimate=\n" << "x: " << recov_3d.rotation().x() << "y: " << recov_3d.rotation().y()<< "z: " << recov_3d.rotation().z()<< "w: " << recov_3d.rotation().w()  << endl;
   //position->setMarginalized(true);
 
   // SparseBlockMatrix<MatrixXd> spinv;
