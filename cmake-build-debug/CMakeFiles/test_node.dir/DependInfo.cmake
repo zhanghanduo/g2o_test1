@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/ugv/project/g2o_test/test.cpp" "/home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles/test_node.dir/test.cpp.o"
+  "/home/zh/softwares/g2o_test/test.cpp" "/home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/test_node.dir/test.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -12,8 +12,8 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/local/include/eigen3"
   "/usr/include/suitesparse"
-  "/usr/local/include/opencv"
-  "/usr/local/include"
+  "/opt/ros/kinetic/include/opencv-3.1.0-dev/opencv"
+  "/opt/ros/kinetic/include/opencv-3.1.0-dev"
   )
 
 # Targets to which this target links.

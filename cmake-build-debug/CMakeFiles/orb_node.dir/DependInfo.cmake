@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/ugv/project/g2o_test/orb.cpp" "/home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles/orb_node.dir/orb.cpp.o"
-  "/home/ugv/project/g2o_test/orb_edge.cpp" "/home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles/orb_node.dir/orb_edge.cpp.o"
+  "/home/zh/softwares/g2o_test/orb.cpp" "/home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/orb_node.dir/orb.cpp.o"
+  "/home/zh/softwares/g2o_test/orb_edge.cpp" "/home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/orb_node.dir/orb_edge.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -13,8 +13,8 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/local/include/eigen3"
   "/usr/include/suitesparse"
-  "/usr/local/include/opencv"
-  "/usr/local/include"
+  "/opt/ros/kinetic/include/opencv-3.1.0-dev/opencv"
+  "/opt/ros/kinetic/include/opencv-3.1.0-dev"
   )
 
 # Targets to which this target links.
