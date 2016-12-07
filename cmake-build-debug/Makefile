@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake
+CMAKE_COMMAND = /home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake
 
 # The command to remove a file.
-RM = /home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake -E remove -f
+RM = /home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ugv/project/g2o_test
+CMAKE_SOURCE_DIR = /home/zh/softwares/g2o_test
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ugv/project/g2o_test/cmake-build-debug
+CMAKE_BINARY_DIR = /home/zh/softwares/g2o_test/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/ugv/project/g2o_test/cmake-build-debug
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -70,7 +70,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/ugv/softwares/clion-2016.2.2/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/zh/softwares/clion-2016.3/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles /home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles /home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ugv/project/g2o_test/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zh/softwares/g2o_test/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -109,6 +109,19 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+#=============================================================================
+# Target rules for targets named orb_se3_node
+
+# Build rule for target.
+orb_se3_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 orb_se3_node
+.PHONY : orb_se3_node
+
+# fast build rule for target.
+orb_se3_node/fast:
+	$(MAKE) -f CMakeFiles/orb_se3_node.dir/build.make CMakeFiles/orb_se3_node.dir/build
+.PHONY : orb_se3_node/fast
 
 #=============================================================================
 # Target rules for targets named orb_node
@@ -163,6 +176,33 @@ orb.cpp.s:
 	$(MAKE) -f CMakeFiles/orb_node.dir/build.make CMakeFiles/orb_node.dir/orb.cpp.s
 .PHONY : orb.cpp.s
 
+orb_se3.o: orb_se3.cpp.o
+
+.PHONY : orb_se3.o
+
+# target to build an object file
+orb_se3.cpp.o:
+	$(MAKE) -f CMakeFiles/orb_se3_node.dir/build.make CMakeFiles/orb_se3_node.dir/orb_se3.cpp.o
+.PHONY : orb_se3.cpp.o
+
+orb_se3.i: orb_se3.cpp.i
+
+.PHONY : orb_se3.i
+
+# target to preprocess a source file
+orb_se3.cpp.i:
+	$(MAKE) -f CMakeFiles/orb_se3_node.dir/build.make CMakeFiles/orb_se3_node.dir/orb_se3.cpp.i
+.PHONY : orb_se3.cpp.i
+
+orb_se3.s: orb_se3.cpp.s
+
+.PHONY : orb_se3.s
+
+# target to generate assembly for a file
+orb_se3.cpp.s:
+	$(MAKE) -f CMakeFiles/orb_se3_node.dir/build.make CMakeFiles/orb_se3_node.dir/orb_se3.cpp.s
+.PHONY : orb_se3.cpp.s
+
 test.o: test.cpp.o
 
 .PHONY : test.o
@@ -198,11 +238,15 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... orb_se3_node"
 	@echo "... orb_node"
 	@echo "... test_node"
 	@echo "... orb.o"
 	@echo "... orb.i"
 	@echo "... orb.s"
+	@echo "... orb_se3.o"
+	@echo "... orb_se3.i"
+	@echo "... orb_se3.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"

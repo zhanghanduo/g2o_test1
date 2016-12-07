@@ -17,6 +17,7 @@ include_directories(${EIGEN3_INCLUDE_DIR} ${CHOLMOD_INCLUDE_DIR} ${CSPARSE_INCLU
 # add_executable(ba_example main.cpp )
 add_executable(test_node test.cpp)
 add_executable(orb_node orb.cpp)
+add_executable(orb_se3_node orb_se3.cpp)
 # target_link_libraries( ba_example 
     # ${OpenCV_LIBS}
     # g2o_core g2o_types_slam3d g2o_solver_csparse g2o_stuff g2o_csparse_extension g2o_types_sba
@@ -31,6 +32,14 @@ target_link_libraries(test_node
         g2o_csparse_extension
         )
 target_link_libraries(orb_node
+        ${OpenCV_LIBS}
+        g2o_core g2o_types_slam3d g2o_solver_csparse g2o_stuff g2o_csparse_extension g2o_types_sba g2o_solver_dense
+        ${CHOLMOD_LIBRARIES}
+        csparse
+        ${EIGEN3_LIBRARIES}
+        g2o_csparse_extension
+        )
+target_link_libraries(orb_se3_node
         ${OpenCV_LIBS}
         g2o_core g2o_types_slam3d g2o_solver_csparse g2o_stuff g2o_csparse_extension g2o_types_sba g2o_solver_dense
         ${CHOLMOD_LIBRARIES}

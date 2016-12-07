@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11 -Wall -O2 -march=native -O3 -DNDEBUG
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/include/eigen3 -I/usr/include/suitesparse -isystem /usr/local/include/opencv -isystem /usr/local/include 
+CXX_INCLUDES = -I/usr/local/include/eigen3 -I/usr/include/suitesparse -isystem /opt/ros/kinetic/include/opencv-3.1.0-dev/opencv -isystem /opt/ros/kinetic/include/opencv-3.1.0-dev 
 
