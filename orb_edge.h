@@ -254,7 +254,7 @@ Vector2D cam_project(const Vector3D & trans_xyz) const;
 
 Vector3D Xw;
 // Eigen::Quaterniond rot;
-Matrix3D rot;
+ Matrix3D rot;
 double fx, fy, cx, cy;
 };
 

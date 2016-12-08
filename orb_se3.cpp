@@ -28,7 +28,7 @@ int main()
   // Set up the optimiser
   SparseOptimizer optimizer;
   optimizer.setVerbose(false);
-  unsigned int numMeasurements = 7;
+  unsigned int numMeasurements = 9;
   // Create the block solver - the dimensions are specified because
   // 3D observations marginalise to a 3D estimate
 //  typedef BlockSolver<BlockSolverTraits<3, 3> > BlockSolver_3_3;
@@ -53,6 +53,8 @@ int main()
   Vector3d truePoint5(-14,-2,49);
   Vector3d truePoint6(-3,2,35);
   Vector3d truePoint7(-8,-4,108);
+  Vector3d truePoint8(7,-5,80);
+  Vector3d truePoint9(-7,5,62);
   truePoint.push_back(truePoint1);
   truePoint.push_back(truePoint2);
   truePoint.push_back(truePoint3);
@@ -60,7 +62,8 @@ int main()
   truePoint.push_back(truePoint5);
   truePoint.push_back(truePoint6);
   truePoint.push_back(truePoint7);
-
+  truePoint.push_back(truePoint8);
+  truePoint.push_back(truePoint9);
   // observations on image
   std::vector<cv::KeyPoint> mKeypoint;
   mKeypoint.reserve(numMeasurements);
@@ -78,6 +81,10 @@ int main()
   mKeypoint[5].pt.y = 53;
   mKeypoint[6].pt.x = 194;
   mKeypoint[6].pt.y = 302;
+  mKeypoint[7].pt.x = 277;
+  mKeypoint[7].pt.y = 287;
+  mKeypoint[8].pt.x = 163;
+  mKeypoint[8].pt.y = 368;
   // Construct vertex which corresponds to the actual point of the target
   g2o::VertexSE3Expmap * vSE3 = new g2o::VertexSE3Expmap();
   Matrix3d R_init = Matrix3D::Identity();

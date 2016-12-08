@@ -28,7 +28,7 @@ int main()
   // Set up the optimiser
   SparseOptimizer optimizer;
   optimizer.setVerbose(false);
-  unsigned int numMeasurements = 7;
+  unsigned int numMeasurements = 9;
   // Create the block solver - the dimensions are specified because
   // 3D observations marginalise to a 3D estimate
   typedef BlockSolver<BlockSolverTraits<3, 3> > BlockSolver_3_3;
@@ -37,50 +37,57 @@ int main()
 //      = new LinearSolverEigen<BlockSolver_3_3::PoseMatrixType>();
   BlockSolver_3_3* blockSolver
       = new BlockSolver_3_3(linearSolver);
-  OptimizationAlgorithmGaussNewton* solver
-    = new OptimizationAlgorithmGaussNewton(blockSolver);
-//    OptimizationAlgorithmLevenberg* solver
-//            = new OptimizationAlgorithmLevenberg(blockSolver);
+//  OptimizationAlgorithmGaussNewton* solver
+//    = new OptimizationAlgorithmGaussNewton(blockSolver);
+    OptimizationAlgorithmLevenberg* solver
+            = new OptimizationAlgorithmLevenberg(blockSolver);
   optimizer.setAlgorithm(solver);
 
   // Sample the actual location of the target of 7 points in world coordinate
-  std::vector<Vector3d> truePoint;
-  truePoint.reserve(numMeasurements);
-  Vector3d truePoint1(5,3.2,101);
-  Vector3d truePoint2(-7.5,10,58);
-  Vector3d truePoint3(8,-9,87);
-  Vector3d truePoint4(12,1,43);
-  Vector3d truePoint5(-14,-2,49);
-  Vector3d truePoint6(-3,2,35);
-  Vector3d truePoint7(-8,-4,108);
-  truePoint.push_back(truePoint1);
-  truePoint.push_back(truePoint2);
-  truePoint.push_back(truePoint3);
-  truePoint.push_back(truePoint4);
-  truePoint.push_back(truePoint5);
-  truePoint.push_back(truePoint6);
-  truePoint.push_back(truePoint7);
-
-  // observations on image
-  std::vector<cv::KeyPoint> mKeypoint;
-  mKeypoint.reserve(numMeasurements);
-  mKeypoint[0].pt.x = 255;
-  mKeypoint[0].pt.y = 336;
-  mKeypoint[1].pt.x = 151;
-  mKeypoint[1].pt.y = 425;
-  mKeypoint[2].pt.x = 278;
-  mKeypoint[2].pt.y = 266;
-  mKeypoint[3].pt.x = 439;
-  mKeypoint[3].pt.y = 337;
-  mKeypoint[4].pt.x = 37;
-  mKeypoint[4].pt.y = 304;
-  mKeypoint[5].pt.x = 150;
-  mKeypoint[5].pt.y = 53;
-  mKeypoint[6].pt.x = 194;
-  mKeypoint[6].pt.y = 302;
+    std::vector<Vector3d> truePoint;
+    truePoint.reserve(numMeasurements);
+    Vector3d truePoint1(5,3.2,101);
+    Vector3d truePoint2(-7.5,10,58);
+    Vector3d truePoint3(8,-9,87);
+    Vector3d truePoint4(12,1,43);
+    Vector3d truePoint5(-14,-2,49);
+    Vector3d truePoint6(-3,2,35);
+    Vector3d truePoint7(-8,-4,108);
+    Vector3d truePoint8(7,-5,80);
+    Vector3d truePoint9(-7,5,62);
+    truePoint.push_back(truePoint1);
+    truePoint.push_back(truePoint2);
+    truePoint.push_back(truePoint3);
+    truePoint.push_back(truePoint4);
+    truePoint.push_back(truePoint5);
+    truePoint.push_back(truePoint6);
+    truePoint.push_back(truePoint7);
+    truePoint.push_back(truePoint8);
+    truePoint.push_back(truePoint9);
+    // observations on image
+    std::vector<cv::KeyPoint> mKeypoint;
+    mKeypoint.reserve(numMeasurements);
+    mKeypoint[0].pt.x = 255;
+    mKeypoint[0].pt.y = 336;
+    mKeypoint[1].pt.x = 151;
+    mKeypoint[1].pt.y = 425;
+    mKeypoint[2].pt.x = 278;
+    mKeypoint[2].pt.y = 266;
+    mKeypoint[3].pt.x = 439;
+    mKeypoint[3].pt.y = 337;
+    mKeypoint[4].pt.x = 37;
+    mKeypoint[4].pt.y = 304;
+    mKeypoint[5].pt.x = 150;
+    mKeypoint[5].pt.y = 53;
+    mKeypoint[6].pt.x = 194;
+    mKeypoint[6].pt.y = 302;
+    mKeypoint[7].pt.x = 277;
+    mKeypoint[7].pt.y = 287;
+    mKeypoint[8].pt.x = 163;
+    mKeypoint[8].pt.y = 368;
   // Construct vertex which corresponds to the actual point of the target
   VertexSBAPointXYZ * Trans3 = new VertexSBAPointXYZ();
-  Vector3d init(0.2,-0.5,-25);
+  Vector3d init(1.2,-1.5,-25);
   Trans3->setEstimate(init);
   Trans3->setId(0);
   Trans3->setFixed(false);
